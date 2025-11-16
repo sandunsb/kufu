@@ -1,0 +1,9 @@
+/* safelist in tailwind.config.js later if needed */
+.oled {
+	background-color: #000;
+	color: #22c55e; /* Tailwind's green-400 hex value */
+}
+.e-ink {
+	background-color: #fff;
+	color: #2d3748; /* Tailwind's gray-800 hex value */
+}
