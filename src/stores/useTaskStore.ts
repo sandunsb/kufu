@@ -22,7 +22,7 @@ export const useTaskStore = create<TaskState>()(
       tasks: [],
       addTask: (title) =>
         set((s) => ({
-          tasks: [...s.tasks, { id: crypto.randomUUID(), title, done: false, pomos: 0 }],
+          tasks: [...s.tasks, { id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, title, done: false, pomos: 0 }],
         })),
       toggleTask: (id) =>
         set((s) => ({
@@ -38,3 +38,4 @@ export const useTaskStore = create<TaskState>()(
     { name: 'kufu-tasks' } // localStorage key
   )
 )
+

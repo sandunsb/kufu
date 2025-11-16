@@ -15,16 +15,15 @@ export default function TaskList() {
 
   return (
     <div className="w-full max-w-md mt-6">
-      <div className="flex gap-2">
+      <form onSubmit={(e) => { e.preventDefault(); onAdd(); }} className="flex gap-2">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && onAdd()}
           placeholder="What are you working on?"
           className="flex-1 px-3 py-2 rounded bg-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
-        <button onClick={onAdd} className="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-500">Add</button>
-      </div>
+        <button type="submit" className="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-500">Add</button>
+      </form>
 
       <ul className="mt-4 space-y-2">
         {tasks.map((t) => (
