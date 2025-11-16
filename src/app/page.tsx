@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTimerStore } from '@/stores/useTimerStore'
 import { useHotkeys } from 'react-hotkeys-hook'
 import TaskList from '@/components/TaskList'
+import { useSoundStore } from '@/stores/useSoundStore'
 
 export default function Home() {
   const { secondsLeft, isRunning, start, pause, tick, phase, reset } = useTimerStore()
@@ -22,6 +23,7 @@ export default function Home() {
   const secs = secondsLeft % 60
   const [theme, setTheme] = useState('dark')
   const themes = ['dark', 'oled', 'e-ink']
+  const { on, toggle } = useSoundStore()
 
   return (
     <main className={`flex flex-col items-center justify-center h-screen ${theme === 'oled' ? 'bg-black text-green-400' : theme === 'e-ink' ? 'bg-white text-gray-800' : 'bg-zinc-900 text-zinc-100'}`}>
@@ -41,6 +43,9 @@ export default function Home() {
         ))}
       </div>
       <TaskList />
+      <button onClick={toggle} className="px-3 py-1 rounded bg-zinc-700 hover:bg-zinc-600">
+        Sound {on ? 'ON' : 'OFF'}
+      </button>
     </main>
   )
 }

@@ -54,5 +54,11 @@ export const useTimerStore = create<TimerState>()((set, get) => ({
     }
 
     set({ phase: newPhase, secondsLeft: newDuration, cycle: newCycle })
+
+    import('@/stores/useSoundStore').then(({ useSoundStore }) => {
+      const snd = useSoundStore.getState();
+      if (newPhase === 'work') snd.playWork();
+      else snd.playBreak();
+    });
   },
 }))
