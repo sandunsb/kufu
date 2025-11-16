@@ -30,9 +30,29 @@ export const useTimerStore = create<TimerState>()((set, get) => ({
   isRunning: false,
   cycle: 0,
 
-  start: () => set({ isRunning: true }),
+  start: () => {
+   set({ isRunning: true })
+    import('@/stores/useSoundStore').then(({ useSoundStore }) => {
+      const snd = useSoundStore.getState()
+      const phase = useTimerStore.getState().phase
+      if (snd.on) {
+        if (phase === 'work') {
+          snd.playWork();
+        } else {
+          snd.playBreak();
+        }
+      }
+    })
+  },
   pause: () => set({ isRunning: false }),
-  reset: () => set({ phase: 'work', secondsLeft: WORK, isRunning: false, cycle: 0 }),
+  reset: () => {
+    set({ phase: 'work', secondsLeft: WORK, isRunning: false, cycle: 0 })
+    // play initial ambience
+    import('@/stores/useSoundStore').then(({ useSoundStore }) => {
+      const snd = useSoundStore.getState()
+      if (snd.on) snd.playWork()
+    })
+  },
 
   tick: () => {
     const s = get()

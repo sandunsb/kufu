@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { Howl } from 'howler'
+import { useTimerStore } from './useTimerStore'
 
 interface SoundState {
   on: boolean
@@ -18,12 +19,18 @@ export const useSoundStore = create<SoundState>()((set, get) => ({
     const s = get()
     if (s.on) {
       s.stop()
+      set({ on: false })
     } else {
       set({ on: true })
+      // replay current phase right now
+      const timer = useTimerStore.getState()
+      if (timer.phase === 'work') {
+        get().playWork()
+      } else {
+        get().playBreak()
+      }
     }
-    set({ on: !s.on })
   },
-
   stop: () => get()._howl?.stop(),
 
   playWork: () => {
