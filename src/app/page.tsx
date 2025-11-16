@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'   
 import { useTimerStore } from '@/stores/useTimerStore'
 import { useHotkeys } from 'react-hotkeys-hook'
+import TaskList from '@/components/TaskList'
 
 export default function Home() {
   const { secondsLeft, isRunning, start, pause, tick, phase, reset } = useTimerStore()
@@ -39,6 +40,7 @@ export default function Home() {
           <button key={t} onClick={() => setTheme(t)} className={`px-3 py-1 rounded ${theme === t ? 'ring-2 ring-zinc-400' : ''}`}>{t}</button>
         ))}
       </div>
+      <TaskList />
     </main>
   )
 }

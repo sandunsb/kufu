@@ -13,9 +13,9 @@ interface TimerState {
   tick: () => void        // call every second
 }
 
-const WORK = 25 * 60
-const SHORT = 5 * 60
-const LONG  = 15 * 60
+const WORK = 0.3 * 60
+const SHORT = 0.1 * 60
+const LONG  = 0.2 * 60
 
 const nextPhase = (p: Phase, c: number): [Phase, number] => {
   if (p === 'work') {
@@ -44,6 +44,15 @@ export const useTimerStore = create<TimerState>()((set, get) => ({
     // phase finished
     const [newPhase, newDuration] = nextPhase(s.phase, s.cycle)
     const newCycle = newPhase === 'work' ? (s.cycle + 1) % 4 : s.cycle
+
+    if (s.phase === 'work') {
+      import('@/stores/useTaskStore').then(({ useTaskStore }) => {
+        const tasks = useTaskStore.getState().tasks
+        const active = tasks.find((t) => !t.done)
+        if (active) useTaskStore.getState().incPomo(active.id)
+      })
+    }
+
     set({ phase: newPhase, secondsLeft: newDuration, cycle: newCycle })
   },
 }))
