@@ -1,11 +1,16 @@
 'use client'
 
 import { useTaskStore } from '@/stores/useTaskStore'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function TaskList() {
   const { tasks, addTask, toggleTask, deleteTask } = useTaskStore()
   const [input, setInput] = useState('')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const onAdd = () => {
     if (!input.trim()) return
@@ -26,7 +31,7 @@ export default function TaskList() {
       </form>
 
       <ul className="mt-4 space-y-2">
-        {tasks.map((t) => (
+        {mounted && tasks.map((t) => (
           <li key={t.id} className="flex items-center gap-3">
             <input type="checkbox" checked={t.done} onChange={() => toggleTask(t.id)} />
             <span className={`flex-1 ${t.done ? 'line-through opacity-50' : ''}`}>{t.title}</span>
@@ -34,7 +39,7 @@ export default function TaskList() {
             <button onClick={() => deleteTask(t.id)} className="text-xs text-red-400 hover:text-red-300">✕</button>
           </li>
         ))}
-        {tasks.length === 0 && (
+        {(!mounted || tasks.length === 0) && (
           <li className="text-zinc-500 text-sm">No tasks yet—add one above.</li>
         )}
       </ul>

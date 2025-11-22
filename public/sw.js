@@ -1,4 +1,4 @@
-const CACHE = 'kufu-v5';          // bump once more
+const CACHE = 'kufu-v6';          // bump once more
 const urlsToCache = ['/', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {
