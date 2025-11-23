@@ -7,12 +7,13 @@ interface SoundState {
   toggle: () => void
   playWork: () => void
   playBreak: () => void
+  playAlarm: () => void
   stop: () => void
   _howl: Howl | null
 }
 
 export const useSoundStore = create<SoundState>()((set, get) => ({
-  on: true,
+  on: false,
   _howl: null,
 
   toggle: () => {
@@ -55,5 +56,13 @@ export const useSoundStore = create<SoundState>()((set, get) => ({
     })
     h.play()
     set({ _howl: h })
+  },
+
+  playAlarm: () => {
+    const h = new Howl({
+      src: ['/sounds/alarm_wake_up.mp3'],
+      volume: 0.5,
+    })
+    h.play()
   },
 }))
