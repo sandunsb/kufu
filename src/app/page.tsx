@@ -6,7 +6,8 @@ import { useTaskStore } from '@/stores/useTaskStore'
 import { useHotkeys } from 'react-hotkeys-hook'
 import TaskList from '@/components/TaskList'
 import { useSoundStore } from '@/stores/useSoundStore'
-import { Moon, Smartphone, FileText, Play, Pause, Infinity, Music, RefreshCcw } from 'lucide-react'
+import { Moon, Smartphone, FileText, Play, Pause, Infinity, Music, RefreshCcw, Settings, ChevronDown } from 'lucide-react'
+import SettingsModal from '@/components/SettingsModal'
 
 import Image from 'next/image'
 
@@ -14,6 +15,8 @@ import BackgroundEffects from '@/components/BackgroundEffects'
 
 export default function Home() {
   const { secondsLeft, totalDuration, isRunning, start, startContinuous, pause, tick, phase, reset, setPhase } = useTimerStore()
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [isEffectMenuOpen, setIsEffectMenuOpen] = useState(false)
 
   useEffect(() => {
     if (!isRunning) return
@@ -101,48 +104,76 @@ export default function Home() {
               key={id}
               onClick={() => setTheme(id)}
               title={label}
-              className={`flex cursor-pointer items-center justify-center p-2 rounded-lg transition-colors ${theme === id
-                ? 'bg-zinc-800 text-zinc-100 ring-2 ring-zinc-400'
-                : 'hover:bg-zinc-800/50 text-zinc-500 hover:text-zinc-300'
-                } ${theme === 'e-ink' && id === theme ? 'bg-gray-200 text-gray-900 ring-gray-400' : ''} ${theme === 'oled' && id === theme ? 'bg-zinc-900 text-green-400 ring-green-900' : ''}`}
+              className={`flex cursor-pointer items-center justify-center p-2 rounded-lg transition-colors ${theme === id ? (theme === 'oled' ? 'bg-green-900 text-green-100' : theme === 'e-ink' ? 'bg-gray-900 text-white' : 'bg-zinc-700 text-white') : (theme === 'oled' ? 'text-green-700 hover:bg-green-900/30' : theme === 'e-ink' ? 'text-gray-400 hover:bg-gray-200' : 'text-zinc-500 hover:bg-zinc-800')}`}
             >
               <Icon size={20} />
             </button>
           ))}
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className={`flex cursor-pointer items-center justify-center p-2 rounded-lg transition-colors ${theme === 'oled' ? 'text-green-700 hover:bg-green-900/30' : theme === 'e-ink' ? 'text-gray-400 hover:bg-gray-200' : 'text-zinc-500 hover:bg-zinc-800'}`}
+            title="Settings"
+          >
+            <Settings size={20} />
+          </button>
         </div>
 
-        <select
-          value={bgEffect}
-          onChange={(e) => setBgEffect(e.target.value as any)}
-          className={`px-3 py-2 rounded-lg text-sm font-medium border bg-transparent focus:outline-none focus:ring-2 cursor-pointer ${theme === 'oled'
-            ? 'border-green-900 text-green-400 focus:ring-green-500 option:bg-black'
-            : theme === 'e-ink'
-              ? 'border-gray-300 text-gray-900 focus:ring-gray-900'
-              : 'border-zinc-700 text-zinc-400 focus:ring-zinc-500 bg-zinc-900'
-            }`}
-        >
-          <option value="none">No Effect</option>
-          <option value="zen">Zen Patterns</option>
-          <option value="progress">Progress Border</option>
-        </select>
+        <div className="relative">
+          <button
+            onClick={() => setIsEffectMenuOpen(!isEffectMenuOpen)}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${theme === 'oled' ? 'text-green-700 hover:bg-green-900/30' : theme === 'e-ink' ? 'text-gray-500 hover:bg-gray-200' : 'text-zinc-500 hover:bg-zinc-800'}`}
+          >
+            <span>{bgEffect === 'none' ? 'No Effect' : bgEffect === 'zen' ? 'Zen Patterns' : 'Progress Border'}</span>
+            <ChevronDown size={16} />
+          </button>
+
+          {isEffectMenuOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setIsEffectMenuOpen(false)} />
+              <div className={`absolute top-full right-0 mt-2 w-40 py-1 rounded-xl border shadow-xl z-50 overflow-hidden ${theme === 'oled' ? 'bg-black border-green-900' : theme === 'e-ink' ? 'bg-white border-gray-200' : 'bg-zinc-900 border-zinc-800'}`}>
+                {[
+                  { id: 'none', label: 'No Effect' },
+                  { id: 'zen', label: 'Zen Patterns' },
+                  { id: 'progress', label: 'Progress Border' }
+                ].map((opt) => (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      setBgEffect(opt.id as any)
+                      setIsEffectMenuOpen(false)
+                    }}
+                    className={`w-full text-left px-4 py-2 text-sm transition-colors ${bgEffect === opt.id
+                      ? (theme === 'oled' ? 'bg-green-900/30 text-green-400' : theme === 'e-ink' ? 'bg-gray-100 text-gray-900' : 'bg-zinc-800 text-white')
+                      : (theme === 'oled' ? 'text-green-700 hover:bg-green-900/20 hover:text-green-500' : theme === 'e-ink' ? 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200')
+                      }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
+
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} theme={theme} />
 
       <div className="relative z-10 mt-24 flex gap-2">
         <button
           onClick={() => setPhase('work')}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${phase === 'work' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
+          className={`px-4 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${phase === 'work' ? 'bg-gray-800 text-white' : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'}`}
         >
           Work
         </button>
         <button
           onClick={() => setPhase('shortBreak')}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${phase === 'shortBreak' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
+          className={`px-4 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${phase === 'shortBreak' ? 'bg-gray-800 text-white' : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'}`}
         >
           Short Break
         </button>
         <button
           onClick={() => setPhase('longBreak')}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${phase === 'longBreak' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
+          className={`px-4 py-2 cursor-pointer rounded-full text-sm font-medium transition-colors ${phase === 'longBreak' ? 'bg-gray-800 text-white' : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'}`}
         >
           Long Break
         </button>
@@ -175,7 +206,7 @@ export default function Home() {
 
           <button
             onClick={reset}
-            className="cursor-pointer flex items-center justify-center w-12 h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all hover:scale-105 active:scale-95"
+            className="cursor-pointer flex items-center justify-center w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-gray-200 transition-all hover:scale-105 active:scale-95"
             title="Reset Timer"
           >
             <RefreshCcw size={20} />
