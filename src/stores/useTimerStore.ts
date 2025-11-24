@@ -14,6 +14,7 @@ interface TimerState {
   pause: () => void
   reset: () => void
   tick: () => void
+  setPhase: (phase: Phase) => void
 }
 
 const WORK = 25 * 60
@@ -67,12 +68,28 @@ export const useTimerStore = create<TimerState>()((set, get) => ({
 
   pause: () => set({ isRunning: false }),
   reset: () => {
-    set({ phase: 'work', secondsLeft: WORK, totalDuration: WORK, isRunning: false, cycle: 0 })
-    // play initial ambience
+    const s = get()
+    let duration = WORK
+    if (s.phase === 'shortBreak') duration = SHORT
+    if (s.phase === 'longBreak') duration = LONG
+
+    set({ secondsLeft: duration, totalDuration: duration, isRunning: false })
+
+    // play initial ambience if needed
     import('@/stores/useSoundStore').then(({ useSoundStore }) => {
       const snd = useSoundStore.getState()
-      if (snd.on) snd.playWork()
+      if (snd.on) {
+        if (s.phase === 'work') snd.playWork()
+        else snd.playBreak()
+      }
     })
+  },
+
+  setPhase: (p: Phase) => {
+    let duration = WORK
+    if (p === 'shortBreak') duration = SHORT
+    if (p === 'longBreak') duration = LONG
+    set({ phase: p, secondsLeft: duration, totalDuration: duration, isRunning: false })
   },
 
   tick: () => {

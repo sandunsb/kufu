@@ -6,14 +6,14 @@ import { useTaskStore } from '@/stores/useTaskStore'
 import { useHotkeys } from 'react-hotkeys-hook'
 import TaskList from '@/components/TaskList'
 import { useSoundStore } from '@/stores/useSoundStore'
-import { Moon, Smartphone, FileText, Play, Pause, Infinity, Music } from 'lucide-react'
+import { Moon, Smartphone, FileText, Play, Pause, Infinity, Music, RefreshCcw } from 'lucide-react'
 
 import Image from 'next/image'
 
 import BackgroundEffects from '@/components/BackgroundEffects'
 
 export default function Home() {
-  const { secondsLeft, totalDuration, isRunning, start, startContinuous, pause, tick, phase, reset } = useTimerStore()
+  const { secondsLeft, totalDuration, isRunning, start, startContinuous, pause, tick, phase, reset, setPhase } = useTimerStore()
 
   useEffect(() => {
     if (!isRunning) return
@@ -127,7 +127,28 @@ export default function Home() {
         </select>
       </div>
 
-      <h1 className="text-9xl font-bold tabular-nums relative z-10 mt-24">
+      <div className="relative z-10 mt-24 flex gap-2">
+        <button
+          onClick={() => setPhase('work')}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${phase === 'work' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
+        >
+          Work
+        </button>
+        <button
+          onClick={() => setPhase('shortBreak')}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${phase === 'shortBreak' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
+        >
+          Short Break
+        </button>
+        <button
+          onClick={() => setPhase('longBreak')}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${phase === 'longBreak' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'}`}
+        >
+          Long Break
+        </button>
+      </div>
+
+      <h1 className="text-9xl font-bold tabular-nums relative z-10 mt-8">
         {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
       </h1>
       <p className="mt-2 text-sm uppercase tracking-widest text-zinc-400 relative z-10">{phase}</p>
@@ -151,6 +172,14 @@ export default function Home() {
               Pause
             </button>
           )}
+
+          <button
+            onClick={reset}
+            className="cursor-pointer flex items-center justify-center w-12 h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all hover:scale-105 active:scale-95"
+            title="Reset Timer"
+          >
+            <RefreshCcw size={20} />
+          </button>
         </div>
 
         {!isRunning && (
