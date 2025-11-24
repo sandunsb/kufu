@@ -35,7 +35,7 @@ export const useTaskStore = create<TaskState>()(
           tasks: s.tasks.map((t) => (t.id === id ? { ...t, pomos: t.pomos + 1 } : t)),
         })),
     }),
-    { name: 'kufu-tasks' } // localStorage key
+    { name: 'pomodrive-tasks' } // localStorage key
   )
 )
 
