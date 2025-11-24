@@ -153,28 +153,31 @@ export default function SettingsModal({ isOpen, onClose, theme }: SettingsModalP
 
   return (
     <div className={`fixed inset-0 z-[100] flex items-center justify-center ${styles.overlay}`}>
-      <div className={`w-full max-w-2xl h-[500px] mx-4 rounded-2xl flex overflow-hidden ${styles.bg}`}>
+      <div className={`w-full max-w-2xl h-[500px] mx-4 rounded-2xl flex flex-col md:flex-row overflow-hidden ${styles.bg}`}>
 
-        {/* Sidebar */}
-        <div className={`w-48 flex flex-col border-r ${theme === 'e-ink' ? 'border-gray-200' : theme === 'oled' ? 'border-green-900' : 'border-zinc-800'}`}>
-          <div className="p-6">
-            <h2 className={`text-xl font-bold ${styles.heading}`}>Settings</h2>
+        {/* Sidebar / Top Navigation */}
+        <div className={`w-full md:w-48 flex flex-row md:flex-col border-b md:border-b-0 md:border-r ${theme === 'e-ink' ? 'border-gray-200' : theme === 'oled' ? 'border-green-900' : 'border-zinc-800'}`}>
+          <div className="p-4 md:p-6 flex items-center justify-between md:block">
+            <h2 className={`text-lg md:text-xl font-bold ${styles.heading}`}>Settings</h2>
+            <button onClick={onClose} className={`md:hidden ${styles.secondaryButton}`}>
+              <X size={20} />
+            </button>
           </div>
-          <nav className="flex-1 flex flex-col">
+          <nav className="flex-1 flex flex-row md:flex-col overflow-x-auto md:overflow-visible">
             <button
               onClick={() => { setActiveTab('timer'); setSelectionMode(null); }}
-              className={`px-6 py-3 text-left text-sm font-medium transition-colors ${activeTab === 'timer' ? styles.tabActive : styles.tabInactive}`}
+              className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'timer' ? styles.tabActive : styles.tabInactive}`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center md:justify-start gap-2 md:gap-3">
                 <Clock size={16} />
                 Timer
               </div>
             </button>
             <button
               onClick={() => { setActiveTab('sound'); setSelectionMode(null); }}
-              className={`px-6 py-3 text-left text-sm font-medium transition-colors ${activeTab === 'sound' ? styles.tabActive : styles.tabInactive}`}
+              className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'sound' ? styles.tabActive : styles.tabInactive}`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center md:justify-start gap-2 md:gap-3">
                 <Volume2 size={16} />
                 Sound
               </div>
