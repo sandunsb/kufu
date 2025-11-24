@@ -146,10 +146,6 @@ export const useTimerStore = create<TimerState>()(
             if (newPhase === 'work') snd.playWork();
             else snd.playBreak();
           });
-        } else {
-          import('@/stores/useSoundStore').then(({ useSoundStore }) => {
-            useSoundStore.getState().stop()
-          })
         }
       },
     }),
