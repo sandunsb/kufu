@@ -54,32 +54,17 @@ export default function SettingsModal({ isOpen, onClose, theme }: SettingsModalP
   // Ambience options
   const ambienceOptions = [
     // Lofi
-    { id: 'lofi/brainstorm.mp3', label: 'Lofi - Brainstorm' },
     { id: 'lofi/break.mp3', label: 'Lofi - Break' },
-    { id: 'lofi/chill-hop-chill.mp3', label: 'Lofi - Chill Hop' },
-    { id: 'lofi/chill-strudy.mp3', label: 'Lofi - Chill Study' },
-    { id: 'lofi/chill.mp3', label: 'Lofi - Chill' },
-    { id: 'lofi/coverless-book.mp3', label: 'Lofi - Coverless Book' },
     { id: 'lofi/creative-time.mp3', label: 'Lofi - Creative Time' },
-    { id: 'lofi/cruising.mp3', label: 'Lofi - Cruising' },
     { id: 'lofi/evening.mp3', label: 'Lofi - Evening' },
-    { id: 'lofi/flower-garden.mp3', label: 'Lofi - Flower Garden' },
     { id: 'lofi/kawaii.mp3', label: 'Lofi - Kawaii' },
-    { id: 'lofi/study.mp3', label: 'Lofi - Study' },
     { id: 'lofi/work.mp3', label: 'Lofi - Work' },
     // Nature
     { id: 'nature/birds-in-forest.mp3', label: 'Nature - Birds in Forest' },
-    { id: 'nature/birds.mp3', label: 'Nature - Birds' },
     { id: 'nature/calming-rain.mp3', label: 'Nature - Calming Rain' },
-    { id: 'nature/country.mp3', label: 'Nature - Country' },
-    { id: 'nature/creek.mp3', label: 'Nature - Creek' },
     { id: 'nature/early-morning.mp3', label: 'Nature - Early Morning' },
     { id: 'nature/jungle.mp3', label: 'Nature - Jungle' },
-    { id: 'nature/morning-birdsong.mp3', label: 'Nature - Morning Birdsong' },
-    { id: 'nature/nature-ambience.mp3', label: 'Nature - Ambience' },
     { id: 'nature/night.mp3', label: 'Nature - Night' },
-    { id: 'nature/park.mp3', label: 'Nature - Park' },
-    { id: 'nature/rain-and-distant-thunder.mp3', label: 'Nature - Rain & Thunder' },
     { id: 'nature/soothing-ocean-waves.mp3', label: 'Nature - Ocean Waves' },
     { id: 'nature/spring-forest-nature.mp3', label: 'Nature - Spring Forest' },
   ]
