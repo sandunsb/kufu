@@ -29,10 +29,10 @@ export const useSoundStore = create<SoundState>()(
   persist(
     (set, get) => ({
       on: false,
-      alarmSound: 'digital-alarm.mp3',
+      alarmSound: 'basic-alarm.mp3',
       workAmbience: 'lofi/work.mp3',
-      shortBreakAmbience: 'nature/rain-and-distant-thunder.mp3',
-      longBreakAmbience: 'nature/birds.mp3',
+      shortBreakAmbience: 'lofi/break.mp3',
+      longBreakAmbience: 'lofi/break.mp3',
       _howl: null,
       _previewTimeout: null,
 
