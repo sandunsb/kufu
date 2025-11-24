@@ -58,7 +58,7 @@ export default function Home() {
         }
       }
 
-      document.title = `${timeStr} - ${phaseStr} | Kufū 工夫`
+      document.title = `${timeStr} - ${phaseStr} | Pomodrive`
     }
 
     // Initial update
@@ -67,7 +67,7 @@ export default function Home() {
     const unsub = useTimerStore.subscribe(updateTitle)
     return () => {
       unsub()
-      document.title = 'Kufū 工夫 — Find Your Ingenious Rhythm'
+      document.title = 'Pomodrive — Find Your Ingenious Rhythm'
     }
   }, [])
 
@@ -79,17 +79,17 @@ export default function Home() {
     { id: 'e-ink', label: 'E-Ink', icon: FileText },
   ]
 
-  const logoSrc = theme === 'e-ink' ? '/kufu_logo.png' : '/kufu_logo_white.png'
+  const logoSrc = theme === 'e-ink' ? '/pomodrive_logo.png' : '/pomodrive_logo_white.png'
 
   return (
     <main className={`relative flex flex-col items-center justify-center min-h-screen w-full py-20 px-6 transition-colors duration-300 ${theme === 'oled' ? 'bg-black text-green-400' : theme === 'e-ink' ? 'bg-[#FCFAF8] text-gray-800' : 'bg-zinc-900 text-zinc-100'}`}>
       <BackgroundEffects effect={bgEffect} phase={phase} theme={theme} progress={progress} />
 
-      <div className="absolute top-6 left-6 z-50">
-        <div className="relative w-32 h-12">
+      <div className="absolute top-4 left-6 z-50">
+        <div className="relative w-48 h-12">
           <Image
             src={logoSrc}
-            alt="Kufu Logo"
+            alt="Pomodrive Logo"
             fill
             className="object-contain"
             priority

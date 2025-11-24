@@ -59,7 +59,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kufū 工夫 — Pomodoro Timer | Study Work Productivity",
+  title: "Pomodrive — Pomodoro Timer | Study Work Productivity",
   description: "A minimal pomodoro timer for deep work.",
   manifest: '/manifest.json',
 };
