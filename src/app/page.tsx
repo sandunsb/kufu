@@ -28,7 +28,7 @@ export default function Home() {
   const secs = secondsLeft % 60
 
   const [theme, setTheme] = useState('e-ink')
-  const [bgEffect, setBgEffect] = useState<'none' | 'zen' | 'progress'>('none')
+  const [bgEffect, setBgEffect] = useState<'none' | 'zen' | 'progress' | 'pulse' | 'rain' | 'particles'>('none')
 
   const { on, toggle } = useSoundStore()
 
@@ -123,7 +123,7 @@ export default function Home() {
             onClick={() => setIsEffectMenuOpen(!isEffectMenuOpen)}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${theme === 'oled' ? 'text-green-700 hover:bg-green-900/30' : theme === 'e-ink' ? 'text-gray-500 hover:bg-gray-200' : 'text-zinc-500 hover:bg-zinc-800'}`}
           >
-            <span>{bgEffect === 'none' ? 'No Effect' : bgEffect === 'zen' ? 'Zen Patterns' : 'Progress Border'}</span>
+            <span>{bgEffect === 'none' ? 'No Effect' : bgEffect === 'zen' ? 'Zen Patterns' : bgEffect === 'progress' ? 'Progress Border' : bgEffect.charAt(0).toUpperCase() + bgEffect.slice(1)}</span>
             <ChevronDown size={16} />
           </button>
 
@@ -134,7 +134,10 @@ export default function Home() {
                 {[
                   { id: 'none', label: 'No Effect' },
                   { id: 'zen', label: 'Zen Patterns' },
-                  { id: 'progress', label: 'Progress Border' }
+                  { id: 'progress', label: 'Progress Border' },
+                  { id: 'pulse', label: 'Pulse' },
+                  { id: 'rain', label: 'Rain' },
+                  { id: 'particles', label: 'Particles' }
                 ].map((opt) => (
                   <button
                     key={opt.id}
