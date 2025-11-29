@@ -19,6 +19,8 @@ interface SoundState {
   playWork: () => void
   playBreak: () => void
   playAlarm: () => void
+  playClick: () => void
+  playReset: () => void
   playPreview: (sound: string, type: 'alarm' | 'ambience') => void
   stop: () => void
   _howl: Howl | null
@@ -106,6 +108,22 @@ export const useSoundStore = create<SoundState>()(
         })
         h.play()
         set({ _howl: h })
+      },
+
+      playClick: () => {
+        const h = new Howl({
+          src: ['/sounds/click.mp3'],
+          volume: 0.5,
+        })
+        h.play()
+      },
+
+      playReset: () => {
+        const h = new Howl({
+          src: ['/sounds/reset.wav'],
+          volume: 0.5,
+        })
+        h.play()
       },
 
       playPreview: (sound: string, type: 'alarm' | 'ambience') => {

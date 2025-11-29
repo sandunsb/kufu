@@ -104,8 +104,27 @@ export const useTimerStore = create<TimerState>()(
       },
 
       setDurations: (work, short, long) => {
-        set({ workDuration: work, shortBreakDuration: short, longBreakDuration: long })
-        // Optionally reset current timer if needed, but for now just update settings
+        set((state) => {
+          const newState = {
+            workDuration: work,
+            shortBreakDuration: short,
+            longBreakDuration: long
+          }
+
+          if (!state.isRunning) {
+            let newDuration = work
+            if (state.phase === 'shortBreak') newDuration = short
+            if (state.phase === 'longBreak') newDuration = long
+
+            return {
+              ...newState,
+              secondsLeft: newDuration,
+              totalDuration: newDuration
+            }
+          }
+
+          return newState
+        })
       },
 
       tick: () => {

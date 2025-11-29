@@ -231,6 +231,18 @@ export default function SettingsModal({ isOpen, onClose, theme }: SettingsModalP
                       />
                     </div>
                   </div>
+                  <div className="pt-4 border-t border-inherit">
+                    <button
+                      onClick={() => {
+                        setWork(25)
+                        setShort(5)
+                        setLong(15)
+                      }}
+                      className={`w-full py-2 rounded-lg text-sm font-medium transition-colors ${styles.secondaryButton} border border-current opacity-70 hover:opacity-100`}
+                    >
+                      Reset to Default
+                    </button>
+                  </div>
                 </div>
               )}
 
