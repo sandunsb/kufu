@@ -76,9 +76,12 @@ export default function Home() {
     // Initial update
     updateTitle()
 
-    const unsub = useTimerStore.subscribe(updateTitle)
+    const unsubTimer = useTimerStore.subscribe(updateTitle)
+    const unsubTasks = useTaskStore.subscribe(updateTitle)
+
     return () => {
-      unsub()
+      unsubTimer()
+      unsubTasks()
       document.title = 'Pomodrive — Find Your Ingenious Rhythm'
     }
   }, [])
@@ -91,7 +94,7 @@ export default function Home() {
       start()
     }
     playClick()
-  }, { enableOnFormTags: ['input', 'textarea'] })
+  })
 
   useHotkeys('r', () => {
     reset()

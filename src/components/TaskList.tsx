@@ -10,6 +10,7 @@ interface TaskListProps {
 export default function TaskList({ theme }: TaskListProps) {
   const { tasks, addTask, toggleTask, deleteTask } = useTaskStore()
   const [input, setInput] = useState('')
+  const [estInput, setEstInput] = useState(1)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -18,8 +19,9 @@ export default function TaskList({ theme }: TaskListProps) {
 
   const onAdd = () => {
     if (!input.trim()) return
-    addTask(input.trim())
+    addTask(input.trim(), estInput)
     setInput('')
+    setEstInput(1)
   }
 
   const getThemeStyles = () => {
@@ -68,6 +70,15 @@ export default function TaskList({ theme }: TaskListProps) {
           placeholder="What are you working on?"
           className={`flex-1 px-4 py-3 rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 ${styles.input}`}
         />
+        <input
+          type="number"
+          min="1"
+          max="10"
+          value={estInput}
+          onChange={(e) => setEstInput(Number(e.target.value))}
+          className={`w-20 px-4 py-3 rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 text-center ${styles.input}`}
+          title="Estimated Pomodoros"
+        />
         <button
           type="submit"
           className={`px-6 py-3 rounded-xl cursor-pointer font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${styles.button}`}
@@ -94,7 +105,9 @@ export default function TaskList({ theme }: TaskListProps) {
             >
               {t.title}
             </span>
-            <span className={`text-sm font-mono ${styles.subtext}`}>{t.pomos} 🍅</span>
+            <span className={`text-sm font-mono ${styles.subtext}`}>
+              {t.pomos} / <span className="opacity-70">{t.estPomos || 1}</span> 🍅
+            </span>
             <button
               onClick={() => deleteTask(t.id)}
               className={`opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all p-1 rounded hover:bg-red-500/10 ${styles.delete}`}

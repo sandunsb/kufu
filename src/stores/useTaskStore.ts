@@ -6,11 +6,12 @@ export interface Task {
   title: string
   done: boolean
   pomos: number // how many completed on this task
+  estPomos: number // estimated pomodoros
 }
 
 interface TaskState {
   tasks: Task[]
-  addTask: (title: string) => void
+  addTask: (title: string, estPomos?: number) => void
   toggleTask: (id: string) => void
   deleteTask: (id: string) => void
   incPomo: (id: string) => void // call when a work phase ends
@@ -20,9 +21,9 @@ export const useTaskStore = create<TaskState>()(
   persist(
     (set) => ({
       tasks: [],
-      addTask: (title) =>
+      addTask: (title, estPomos = 1) =>
         set((s) => ({
-          tasks: [...s.tasks, { id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, title, done: false, pomos: 0 }],
+          tasks: [...s.tasks, { id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, title, done: false, pomos: 0, estPomos }],
         })),
       toggleTask: (id) =>
         set((s) => ({
