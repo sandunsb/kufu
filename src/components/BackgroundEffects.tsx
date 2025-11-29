@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo, memo } from 'react'
 
 type EffectType = 'none' | 'zen' | 'progress' | 'pulse' | 'rain' | 'particles'
 type Phase = 'work' | 'shortBreak' | 'longBreak'
@@ -9,6 +9,87 @@ interface BackgroundEffectsProps {
   theme: string
   progress: number
 }
+
+const Rain = memo(({ theme }: { theme: string }) => {
+  const drops = useMemo(() => Array.from({ length: 20 }).map((_, i) => ({
+    left: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 2}s`,
+    duration: `${0.5 + Math.random() * 0.5}s`
+  })), [])
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      {drops.map((drop, i) => (
+        <div
+          key={i}
+          className="absolute top-[-20px] w-[1px] h-[20px] animate-rain"
+          style={{
+            left: drop.left,
+            background: theme === 'oled' ? 'rgba(74, 222, 128, 0.5)' : theme === 'e-ink' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
+            animationName: 'fall',
+            animationDuration: drop.duration,
+            animationTimingFunction: 'linear',
+            animationIterationCount: 'infinite',
+            animationDelay: drop.delay
+          }}
+        />
+      ))}
+      <style jsx>{`
+          @keyframes fall {
+            to { transform: translateY(100vh); }
+          }
+        `}</style>
+    </div>
+  )
+})
+Rain.displayName = 'Rain'
+
+const Particles = memo(({ theme }: { theme: string }) => {
+  const particles = useMemo(() => Array.from({ length: 40 }).map((_, i) => ({
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 5}s`,
+    duration: `${10 + Math.random() * 10}s`,
+    size: Math.random() * 6 + 2,
+    tx: Math.random() * 100 - 50, // Random translation X
+    ty: Math.random() * 100 - 50  // Random translation Y
+  })), [])
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      {particles.map((p, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full opacity-30"
+          style={{
+            left: p.left,
+            top: p.top,
+            width: p.size,
+            height: p.size,
+            background: theme === 'oled' ? 'rgba(74, 222, 128, 0.6)' : theme === 'e-ink' ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.4)',
+            animationName: i % 2 === 0 ? 'float1' : 'float2',
+            animationDuration: p.duration,
+            animationTimingFunction: 'ease-in-out',
+            animationIterationCount: 'infinite',
+            animationDirection: 'alternate',
+            animationDelay: p.delay
+          }}
+        />
+      ))}
+      <style jsx>{`
+          @keyframes float1 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, -60px); }
+          }
+          @keyframes float2 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-60px, 60px); }
+          }
+        `}</style>
+    </div>
+  )
+})
+Particles.displayName = 'Particles'
 
 export default function BackgroundEffects({ effect, phase, theme, progress }: BackgroundEffectsProps) {
   const [styles, setStyles] = useState<React.CSSProperties>({})
@@ -105,82 +186,11 @@ export default function BackgroundEffects({ effect, phase, theme, progress }: Ba
   }
 
   if (effect === 'rain') {
-    const drops = Array.from({ length: 20 }).map((_, i) => ({
-      left: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 2}s`,
-      duration: `${0.5 + Math.random() * 0.5}s`
-    }))
-
-    return (
-      <div ref={containerRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {drops.map((drop, i) => (
-          <div
-            key={i}
-            className="absolute top-[-20px] w-[1px] h-[20px] animate-rain"
-            style={{
-              left: drop.left,
-              background: theme === 'oled' ? 'rgba(74, 222, 128, 0.5)' : theme === 'e-ink' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
-              animationName: 'fall',
-              animationDuration: drop.duration,
-              animationTimingFunction: 'linear',
-              animationIterationCount: 'infinite',
-              animationDelay: drop.delay
-            }}
-          />
-        ))}
-        <style jsx>{`
-          @keyframes fall {
-            to { transform: translateY(100vh); }
-          }
-        `}</style>
-      </div>
-    )
+    return <Rain theme={theme} />
   }
 
   if (effect === 'particles') {
-    const particles = Array.from({ length: 40 }).map((_, i) => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 5}s`,
-      duration: `${10 + Math.random() * 10}s`,
-      size: Math.random() * 6 + 2,
-      tx: Math.random() * 100 - 50, // Random translation X
-      ty: Math.random() * 100 - 50  // Random translation Y
-    }))
-
-    return (
-      <div ref={containerRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {particles.map((p, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full opacity-30"
-            style={{
-              left: p.left,
-              top: p.top,
-              width: p.size,
-              height: p.size,
-              background: theme === 'oled' ? 'rgba(74, 222, 128, 0.6)' : theme === 'e-ink' ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.4)',
-              animationName: i % 2 === 0 ? 'float1' : 'float2',
-              animationDuration: p.duration,
-              animationTimingFunction: 'ease-in-out',
-              animationIterationCount: 'infinite',
-              animationDirection: 'alternate',
-              animationDelay: p.delay
-            }}
-          />
-        ))}
-        <style jsx>{`
-          @keyframes float1 {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(60px, -60px); }
-          }
-          @keyframes float2 {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-60px, 60px); }
-          }
-        `}</style>
-      </div>
-    )
+    return <Particles theme={theme} />
   }
 
   return (
