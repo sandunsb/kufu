@@ -166,7 +166,8 @@ export default function Home() {
                   { id: 'pulse', label: 'Pulse' },
                   { id: 'rain', label: 'Rain' },
                   { id: 'fireflies', label: 'Fireflies' },
-                  { id: 'particles', label: 'Particles' }
+                  { id: 'particles', label: 'Particles' },
+                  { id: 'snow', label: 'Snow' }
                 ].map((opt) => (
                   <button
                     key={opt.id}

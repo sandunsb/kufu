@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, memo } from 'react'
 
-type EffectType = 'none' | 'zen' | 'progress' | 'pulse' | 'rain' | 'fireflies' | 'particles'
+type EffectType = 'none' | 'zen' | 'progress' | 'pulse' | 'rain' | 'fireflies' | 'particles' | 'snow'
 type Phase = 'work' | 'shortBreak' | 'longBreak'
 
 interface BackgroundEffectsProps {
@@ -9,6 +9,47 @@ interface BackgroundEffectsProps {
   theme: string
   progress: number
 }
+
+const Snow = memo(({ theme }: { theme: string }) => {
+  const flakes = useMemo(() => Array.from({ length: 50 }).map((_, i) => ({
+    left: `${Math.random() * 100}%`,
+    animationDuration: `${5 + Math.random() * 10}s`,
+    delay: `${Math.random() * 5}s`,
+    opacity: Math.random() * 0.5 + 0.3,
+    size: Math.random() * 4 + 2
+  })), [])
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      {flakes.map((flake, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: flake.left,
+            top: -10,
+            width: flake.size,
+            height: flake.size,
+            backgroundColor: theme === 'oled' ? 'rgba(255, 255, 255, 0.8)' : theme === 'e-ink' ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.8)',
+            opacity: flake.opacity,
+            animation: `snow-fall ${flake.animationDuration} linear infinite`,
+            animationDelay: flake.delay
+          }}
+        />
+      ))}
+      <style jsx>{`
+          @keyframes snow-fall {
+            0% { transform: translate(0, -10px); }
+            25% { transform: translate(15px, 25vh); }
+            50% { transform: translate(-15px, 50vh); }
+            75% { transform: translate(15px, 75vh); }
+            100% { transform: translate(0, 105vh); }
+          }
+        `}</style>
+    </div>
+  )
+})
+Snow.displayName = 'Snow'
 
 const Rain = memo(({ theme }: { theme: string }) => {
   const drops = useMemo(() => Array.from({ length: 20 }).map((_, i) => ({
@@ -270,9 +311,12 @@ export default function BackgroundEffects({ effect, phase, theme, progress }: Ba
     return <Fireflies theme={theme} />
   }
 
-
   if (effect === 'particles') {
     return <Particles theme={theme} />
+  }
+
+  if (effect === 'snow') {
+    return <Snow theme={theme} />
   }
 
   return (
