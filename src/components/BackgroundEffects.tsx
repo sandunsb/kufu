@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, memo } from 'react'
 
-type EffectType = 'none' | 'zen' | 'progress' | 'pulse' | 'rain' | 'particles'
+type EffectType = 'none' | 'zen' | 'progress' | 'pulse' | 'rain' | 'fireflies' | 'particles'
 type Phase = 'work' | 'shortBreak' | 'longBreak'
 
 interface BackgroundEffectsProps {
@@ -90,6 +90,83 @@ const Particles = memo(({ theme }: { theme: string }) => {
   )
 })
 Particles.displayName = 'Particles'
+
+const Fireflies = memo(({ theme }: { theme: string }) => {
+  const fireflies = useMemo(() => Array.from({ length: 30 }).map((_, i) => ({
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    animationDuration: `${15 + Math.random() * 15}s`,
+    flickerDuration: `${3 + Math.random() * 3}s`,
+    delay: `${Math.random() * 5}s`,
+    size: Math.random() * 4 + 2,
+    animType: Math.floor(Math.random() * 3) + 1 // 1, 2, or 3
+  })), [])
+
+  const color = theme === 'oled' ? 'rgba(163, 230, 53, 0.8)' : theme === 'e-ink' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(250, 204, 21, 0.8)'
+  const glow = theme === 'e-ink' ? 'none' : `0 0 ${theme === 'oled' ? '8px rgba(163, 230, 53, 0.6)' : '8px rgba(250, 204, 21, 0.6)'}`
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      {fireflies.map((f, i) => (
+        <div
+          key={i}
+          className="absolute"
+          style={{
+            left: f.left,
+            top: f.top,
+            animationName: `firefly-float-${f.animType}`,
+            animationDuration: f.animationDuration,
+            animationTimingFunction: 'ease-in-out',
+            animationIterationCount: 'infinite',
+            animationDelay: f.delay
+          }}
+        >
+          <div
+            className="rounded-full"
+            style={{
+              width: f.size,
+              height: f.size,
+              backgroundColor: color,
+              boxShadow: glow,
+              animationName: 'flicker',
+              animationDuration: f.flickerDuration,
+              animationTimingFunction: 'ease-in-out',
+              animationIterationCount: 'infinite'
+            }}
+          />
+        </div>
+      ))}
+      <style jsx>{`
+          @keyframes firefly-float-1 {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(60px, -40px); }
+            40% { transform: translate(30px, -90px); }
+            60% { transform: translate(-50px, -50px); }
+            80% { transform: translate(-30px, 30px); }
+            100% { transform: translate(0, 0); }
+          }
+          @keyframes firefly-float-2 {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-60px, 50px); }
+            50% { transform: translate(-90px, 0px); }
+            75% { transform: translate(-50px, -60px); }
+            100% { transform: translate(0, 0); }
+          }
+          @keyframes firefly-float-3 {
+            0% { transform: translate(0, 0); }
+            33% { transform: translate(70px, 60px); }
+            66% { transform: translate(40px, -70px); }
+            100% { transform: translate(0, 0); }
+          }
+          @keyframes flicker {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+          }
+        `}</style>
+    </div>
+  )
+})
+Fireflies.displayName = 'Fireflies'
 
 export default function BackgroundEffects({ effect, phase, theme, progress }: BackgroundEffectsProps) {
   const [styles, setStyles] = useState<React.CSSProperties>({})
@@ -188,6 +265,11 @@ export default function BackgroundEffects({ effect, phase, theme, progress }: Ba
   if (effect === 'rain') {
     return <Rain theme={theme} />
   }
+
+  if (effect === 'fireflies') {
+    return <Fireflies theme={theme} />
+  }
+
 
   if (effect === 'particles') {
     return <Particles theme={theme} />

@@ -165,6 +165,7 @@ export default function Home() {
                   { id: 'progress', label: 'Progress Border' },
                   { id: 'pulse', label: 'Pulse' },
                   { id: 'rain', label: 'Rain' },
+                  { id: 'fireflies', label: 'Fireflies' },
                   { id: 'particles', label: 'Particles' }
                 ].map((opt) => (
                   <button
