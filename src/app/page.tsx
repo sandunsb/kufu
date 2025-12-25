@@ -225,7 +225,7 @@ export default function Home() {
                 start()
                 playClick()
               }}
-              className="cursor-pointer flex items-center gap-2 px-8 py-4 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-lg transition-all shadow-[0_4px_0_rgb(4,120,87)] active:shadow-none active:translate-y-[4px]"
+              id="start-button" className="cursor-pointer flex items-center gap-2 px-8 py-4 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-lg transition-all shadow-[0_4px_0_rgb(4,120,87)] active:shadow-none active:translate-y-[4px]"
             >
               <Play size={24} fill="currentColor" />
               START
